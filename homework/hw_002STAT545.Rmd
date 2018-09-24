@@ -1,0 +1,123 @@
+---
+title: "hw_002.STAT545"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+# STAT 545 homework assignment 2
+## Zachary Sherker
+# 1. Upload the gapminder dataset and tidyverse.
+```{r}
+library(gapminder)
+library(tidyverse)
+```
+# 2. Exloring the gapminder object:
+##  2.1 Checking the structure of the dataset:
+```{r}
+typeof(gapminder)
+```
+##  2.2 Checking the class of the dataset:
+```{r}
+class(gapminder)
+```
+##  2.3 Determine the number of rows of data in the dataset:
+```{r}
+nrow(gapminder)
+```
+##  2.4 Determine the dimensions of the dataset:
+```{r}
+dim(gapminder)
+```
+##  2.5 Determine the data type of each variable in the dataset:
+The dataset documents the population (pop), life expectancy (lifeExp), and GDP per capita (gdpPercapita) for various countries and continents from 1952-2007. Population, life expectancy, GDP per capita, and year are all quantitative variables, whereas country and continent are categorical variables.
+
+# 3. Explore at least one quantitative and one categorical variable from the dataset.
+Quantitative var=gdpPercap, categorical var=continent
+
+## 3.1 Find the min, max, med, mean, 1st quartile, and 3rd quartile of the quantitative variable and visualize the spread of the data in context of the categorical variable.
+```{r}
+summary(gapminder$gdpPercap)
+```
+```{r}
+ggplot(gapminder, aes(continent, gdpPercap)) +
+  geom_jitter() +
+  geom_violin(fill = "purple")
+```
+
+## 3.2 Create a few plots of various variables in the dataset and explore the `filter` command.
+Boxplot of populations by continent with jitter plot (alpha=.1) overtop.
+```{r}
+ggplot(gapminder, aes(continent, pop)) +
+  scale_y_log10() +
+  geom_boxplot(fill = "green") +
+  geom_jitter(alpha=.1)
+```
+
+Create a violin plot of gdpPercap per continent
+```{r}
+ggplot(gapminder, aes(continent, gdpPercap)) +
+  scale_y_log10() +
+  geom_violin(fill = "blue")
+```
+
+Filter data for only Asian countries.
+```{r}
+gapminder %>%
+  filter(continent == "Asia")
+```
+Filter data for only Asian countries with population > 5,000,000
+```{r}
+gapminder %>%
+  filter(pop > 5000000) %>%
+  filter(continent == "Asia")
+```
+Only present the gdpPercap and population for this subset of data
+```{r}
+gapminder %>%
+  filter(pop > 5000000) %>%
+  filter(continent == "Asia") %>%
+  select(country, year, gdpPercap, pop)
+```
+Arrange this data in order from lowest to highest pop
+```{r}
+gapminder %>%
+  filter(pop > 5000000) %>%
+  filter(continent == "Asia")%>%
+  select(country, year, gdpPercap, pop) %>%
+  arrange(pop)
+```
+Filter this data for years 1995-2005
+```{r}
+gapminder %>%
+  filter(pop > 5000000) %>%
+  filter(continent == "Asia")%>%
+  filter(year>1995 & year<2005)%>%
+  select(country, year, gdpPercap, pop) %>%
+  arrange(pop)
+```
+
+
+
+
